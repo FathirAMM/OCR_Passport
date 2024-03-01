@@ -4,7 +4,7 @@ from passporteye import read_mrz
 import pytesseract
 
 # Configuration for Tesseract OCR
-pytesseract.pytesseract.tesseract_cmd = r'C:\Program Files\Tesseract-OCR\tesseract.exe'
+#pytesseract.pytesseract.tesseract_cmd = r'C:\Program Files\Tesseract-OCR\tesseract.exe'
 config = ('-l eng+sin+typew --oem 1 --psm 3')
 
 
