@@ -2,6 +2,7 @@ import streamlit as st
 from PIL import Image
 from passporteye import read_mrz
 import pytesseract
+import re
 
 # Configuration for Tesseract OCR
 #pytesseract.pytesseract.tesseract_cmd = r'C:\Program Files\Tesseract-OCR\tesseract.exe'
@@ -11,6 +12,11 @@ config = ('-l eng+sin+typew --oem 1 --psm 3')
 def extract_mrz_data(uploaded_image):
     mrz = read_mrz(uploaded_image)
     mrz_data = mrz.to_dict()
+
+    # Clean NIC number
+    if 'personal_number' in mrz_data:
+        mrz_data['personal_number'] = re.sub('<{4}', '', mrz_data['personal_number'])
+
     return mrz_data
 
 # Function to extract text from image using Pytesseract
@@ -20,7 +26,7 @@ def extract_text_from_image(image):
 
 # Main function to run the Streamlit app
 def main():
-    st.title("🛂 Passport Data Extractor 📃")
+  
 
     # Upload image
     uploaded_image = st.file_uploader("Upload an image...", type=["jpg", "jpeg", "png"])
@@ -33,15 +39,16 @@ def main():
         # Extract MRZ data
         mrz_data = extract_mrz_data(uploaded_image)
 
-
         # Extract text from image
         extracted_text = extract_text_from_image(image)
 
         # Check for the word "passport" in the extracted text
         if "passport" in extracted_text.lower():
             st.warning("🔍 Passport found! 🎉")
+            
 
-        # Display extracted  data
+        # Display extracted MRZ data
+        st.subheader("📝 MRZ Data 📋")
         st.write(f"**Names:** {mrz_data['names']}")
         st.write(f"**Surname:** {mrz_data['surname']}")
         st.write(f"**Nationality:** {mrz_data['nationality']}")
@@ -51,9 +58,14 @@ def main():
         st.write(f"**Expiration Date:** {mrz_data['expiration_date']}")
         st.write(f"**Sex:** {mrz_data['sex']}")
         st.write(f"**Type:** {mrz_data['type']}")
-        st.write(f"**machine-readable zone (MRZ):** {mrz_data['raw_text']}")
+        st.write(f"**Raw Text:** {mrz_data['raw_text']}")
 
+        # Extract text from image
+        extracted_text = extract_text_from_image(image)
 
+        # Check for the word "passport" in the extracted text
+        if "passport" in extracted_text.lower():
+            st.warning("🔍 Passport found! 🎉")
 
         # Expander to display extracted text
         with st.expander("🔍 Extracted Text"):
