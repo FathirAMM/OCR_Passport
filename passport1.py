@@ -7,7 +7,6 @@ import pytesseract
 #pytesseract.pytesseract.tesseract_cmd = r'C:\Program Files\Tesseract-OCR\tesseract.exe'
 config = ('-l eng+sin+typew --oem 1 --psm 3')
 
-
 # Function to extract MRZ data from the uploaded image
 def extract_mrz_data(uploaded_image):
     mrz = read_mrz(uploaded_image)
@@ -21,10 +20,10 @@ def extract_text_from_image(image):
 
 # Main function to run the Streamlit app
 def main():
-    st.title("Passport Data Extractor")
+    st.title("🛂 Passport Data Extractor 📃")
 
     # Upload image
-    uploaded_image = st.file_uploader("Upload an  image...", type=["jpg", "jpeg", "png"])
+    uploaded_image = st.file_uploader("Upload an image...", type=["jpg", "jpeg", "png"])
 
     if uploaded_image is not None:
         # Display uploaded image
@@ -33,30 +32,32 @@ def main():
 
         # Extract MRZ data
         mrz_data = extract_mrz_data(uploaded_image)
-     
-        st.write("Names:", mrz_data['names'])
-        st.write("Surname:", mrz_data['surname'])
-        st.write("Nationality:", mrz_data['nationality'])
-        st.write("NIC Number:", mrz_data['personal_number'])
-        st.write("Passport Number:", mrz_data['number'])
-        st.write("Date of Birth:", mrz_data['date_of_birth'])
-        st.write("Expiration Date:", mrz_data['expiration_date'])
-        st.write("Sex:", mrz_data['sex'])
-        st.write("Type:", mrz_data['type'])
-        st.write("Raw Text:", mrz_data['raw_text'])
+
 
         # Extract text from image
         extracted_text = extract_text_from_image(image)
 
         # Check for the word "passport" in the extracted text
         if "passport" in extracted_text.lower():
-            st.warning("Passport found!")
+            st.warning("🔍 Passport found! 🎉")
+
+        # Display extracted  data
+        st.write(f"**Names:** {mrz_data['names']}")
+        st.write(f"**Surname:** {mrz_data['surname']}")
+        st.write(f"**Nationality:** {mrz_data['nationality']}")
+        st.write(f"**NIC Number:** {mrz_data['personal_number']}")
+        st.write(f"**Passport Number:** {mrz_data['number']}")
+        st.write(f"**Date of Birth:** {mrz_data['date_of_birth']}")
+        st.write(f"**Expiration Date:** {mrz_data['expiration_date']}")
+        st.write(f"**Sex:** {mrz_data['sex']}")
+        st.write(f"**Type:** {mrz_data['type']}")
+        st.write(f"**machine-readable zone (MRZ):** {mrz_data['raw_text']}")
+
+
 
         # Expander to display extracted text
-        expander = st.expander("Extracted Text")
-        with expander:
+        with st.expander("🔍 Extracted Text"):
             st.write(extracted_text)
-
 
 if __name__ == "__main__":
     main()
