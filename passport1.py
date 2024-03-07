@@ -26,6 +26,7 @@ def extract_text_from_image(image):
 
 # Main function to run the Streamlit app
 def main():
+    st.title("🛂 Passport Data Extractor 📃")
   
 
     # Upload image
