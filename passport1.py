@@ -61,12 +61,7 @@ def main():
         st.write(f"**Type:** {mrz_data['type']}")
         st.write(f"**Raw Text:** {mrz_data['raw_text']}")
 
-        # Extract text from image
-        extracted_text = extract_text_from_image(image)
-
-        # Check for the word "passport" in the extracted text
-        if "passport" in extracted_text.lower():
-            st.warning("🔍 Passport found! 🎉")
+        
 
         # Expander to display extracted text
         with st.expander("🔍 Extracted Text"):
